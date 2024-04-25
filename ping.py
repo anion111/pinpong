@@ -8,7 +8,10 @@ clck = time.Clock()
 game = True
 
 
-
+finish = False
+live = 3
+speedX = 3
+speedY = 3     
 
 
 class GameSprite(sprite.Sprite):
@@ -27,6 +30,7 @@ class GameSprite(sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = player_x
         self.rect.y = player_y
+        self.size = size_x
     #метод, отрисовывающий героя на окне
 
     def reset(self):
@@ -44,7 +48,7 @@ font1 = font.Font(None, 80)
 
 text = "YYYEEEPIIII, YAPI<3!! ,YEPI,YEPI!!!! >-<"
 
-
+text1 = "Ohh nooo!!!"
 
 
 # mixer.init()
@@ -56,34 +60,37 @@ text = "YYYEEEPIIII, YAPI<3!! ,YEPI,YEPI!!!! >-<"
 
 
 class Player(GameSprite):
-    def update(self):
-        keys = key.get_pressed()
-        if keys[K_k]  :
-            self.rect.y += self.speed
-        if keys[K_l]:
-            self.rect.y -= self.speed
 
-    def update1(self):
-        keys = key.get_pressed()
-        if keys[K_z] :
-            self.rect.y -= self.speed
-        if keys[K_s] :
-            self.rect.y += self.speed
+        def update(self):
+            keys = key.get_pressed()
+            if keys[K_j] and self.rect.y <= 450 :
+                self.rect.y += self.speed
+            if keys[K_l] and self.rect.y >= 3:
+                self.rect.y -= self.speed
 
-
-
+        def update1(self):
+            keys = key.get_pressed()
+            if keys[K_d] and self.rect.y >= 3 :
+                self.rect.y -= self.speed
+            if keys[K_a] and self.rect.y <= 450 :
+                self.rect.y += self.speed
 
 
 
-rar = Player('hfrktdsq.png', 450, 300, 20, 30, 20)
+
+
+
+rar = Player('hfr ktdsq.png', 450, 300, 20, 30, 20)
 ral = Player( 'ракетка.png', 30, 300, 80, 30, 20)
 ball = GameSprite("r.png", 90, 200, 60, 30, 10)
-finish = False
-live = 3
-speedX = 3
-speedY = 3     
+
 while game:
 
+    for i in range(len(text)-1):
+        let = font1.render(text[i], True, (colors[1]))
+
+    for i in range(len(text1)-1):
+        lett = font1.render(text1[i], True, (colors[1]))
 
     
     if finish != True:
@@ -99,29 +106,27 @@ while game:
             speedX *= -1
 
 
-        # if not sprite.collide_rect( rar, ball) or sprite.collide_rect(ral, ball):
-        #     live -= 1
-        #     if live == 0:    
-        #         # sound1.play()
-
-        #         # lose.blit()
-        #         time.delay(2000)
-        #         break
-
     for e in event.get():
         if e.type == QUIT:
             game = False
 
-    for i in range(len(text)-1):
-        let = font1.render(text[i], True, (colors[1]))
+
+    if ball.rect.x >= 500 or ball.rect.x >= 0:
+        ball.reset(50,50)
+        live -= 1  
+        if live == 0:    
+            lett.blit()
+            time.delay(2000)
+            break
+
 
     win.blit(let, (200, 200))
-    win.fill((225,0,55))
+    win.fill((255, 192, 203))
     ball.reset()
     rar.update()      
     rar.reset()
     ral.update1()
     ral.reset()
     clck.tick(60)
-    # win.blit()
+        # win.blit()
     display.update()
